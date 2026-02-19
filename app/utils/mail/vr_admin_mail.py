@@ -18,7 +18,7 @@ Devotee {i}
 Name   : {d.full_name}
 Age    : {d.age}
 Gender : {d.gender}
-
+Category : {d.category}
 Spiritual Place: {d.spiritual_places}
 ID     : {d.aadhar_image_url}
 """
