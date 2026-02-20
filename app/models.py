@@ -256,8 +256,9 @@ class VRDarshanDevotee(Base):
     age = Column(Integer, nullable=False)
     gender = Column(String(20), nullable=False)
 
-    category = Column(String(100), nullable=False)
-    spiritual_places = Column(JSON, nullable=False)
+    # category = Column(String(100), nullable=False)
+    # spiritual_places = Column(JSON, nullable=False)
+    temples = Column(JSON, nullable=False)
     
 
     aadhar_image_url = Column(Text, nullable=False)

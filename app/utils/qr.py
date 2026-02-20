@@ -9,6 +9,29 @@ from app.config import settings
 from fastapi import BackgroundTasks
 
 router = APIRouter()
+
+CATEGORY_TEMPLES = {
+    "Char Dham": ["Kedarnath", "Badrinath", "Gangotri", "Yamunotri"],
+    "Jyotirlinga": [
+        "Somnath", "Mallikarjuna", "Mahakaleshwar",
+        "Omkareshwar", "Bhimashankar",
+        "Kashi Vishwanath", "Trimbakeshwar",
+        "Vaidyanath", "Nageshwar"
+    ],
+    "Shaktipeeth": [
+        "Vaishno Devi", "Kamakhya Devi",
+        "Kalighat", "Jwala Ji",
+        "Chintpurni", "Hinglaj Mata",
+        "Maa Tara Tarini", "Maa Sharda"
+    ],
+    "3D Abhishek": [
+        "Mahakal 3D Abhishek",
+        "Kashi Vishwanath 3D",
+        "Somnath 3D",
+        "Omkareshwar 3D"
+    ]
+}
+
 def generate_payment_qr(amount: int) -> str:
     upi_id = "6260499299@okbizaxis"
     payee_name = "Tirth Ghumo"
@@ -35,84 +58,56 @@ def generate_payment_qr(amount: int) -> str:
 
     return file_path
 
-CHAR_DHAM = [
-    "Kedarnath", "Badrinath", "Gangotri", "Yamunotri"
-]
-
-JYOTIRLINGA = [
-    "Somnath", "Mallikarjuna", "Mahakaleshwar",
-    "Omkareshwar", "Kedarnath Jyotirlinga",
-    "Bhimashankar", "Kashi Vishwanath",
-    "Trimbakeshwar", "Vaidyanath", "Nageshwar"
-]
-
-ABHISHEK_3D = [
-    "Mahakal 3D Abhishek",
-    "Kashi Vishwanath 3D",
-    "Somnath 3D",
-    "Omkareshwar 3D"
-]
-
-SHAKTIPEETH = [
-    "Vaishno Devi", "Kamakhya Devi",
-    "Kalighat", "Jwala Ji",
-    "Chintpurni", "Hinglaj Mata",
-    "Maa Tara Tarini", "Maa Sharda"
-]
 
 @router.get("/vr-darshan/price")
 async def generate_vr_darshan_qr(
     devotees: str = Form(...)
 ):
-    try:
-        devotees_data = json.loads(devotees)
-    except Exception:
-        raise HTTPException(400, "Invalid devotees JSON")
-
+    devotees_data = json.loads(devotees)
     total_amount = 0
 
     for devotee in devotees_data:
 
-        category = devotee.get("category")
-        selected_temples = devotee.get("spiritual_places")
+        temples_by_category = devotee.get("temples")
 
-        if not category or not selected_temples:
-            raise HTTPException(400, "Category and spiritual_places required")
+        if not temples_by_category:
+            raise HTTPException(400, "Temple selection required")
 
-        # Expand "All Temples"
-        if "All Temples" in selected_temples:
+        for category, temple_list in temples_by_category.items():
+
+            if category not in CATEGORY_TEMPLES:
+                raise HTTPException(400, f"Invalid category {category}")
+
+            if "All Temples" in temple_list:
+                temple_list = CATEGORY_TEMPLES[category]
+
+            # Validate temple belongs to category
+            for temple in temple_list:
+                if temple not in CATEGORY_TEMPLES[category]:
+                    raise HTTPException(
+                        400,
+                        f"{temple} not valid for {category}"
+                    )
+
+            count = len(temple_list)
+
+            # Apply bundle logic
             if category == "Char Dham":
-                selected_temples = CHAR_DHAM
-            elif category == "Jyotirlinga & Shiv Darshan":
-                selected_temples = JYOTIRLINGA
-            elif category == "3D Abhishek Darshan":
-                selected_temples = ABHISHEK_3D
-            elif category == "Shaktipeeth & Devi Darshan":
-                selected_temples = SHAKTIPEETH
+                total_amount += 151 if count == 4 else count * 51
 
-        count = len(selected_temples)
+            elif category == "Jyotirlinga":
+                if count == 9:
+                    total_amount += 451
+                elif count == 6:
+                    total_amount += 251
+                else:
+                    total_amount += count * 51
 
-        # 🔥 Pricing Logic
+            elif category == "Shaktipeeth":
+                total_amount += 401 if count == 8 else count * 51
 
-        if category == "Char Dham":
-            total_amount += 151 if count == 4 else count * 51
-
-        elif category == "Jyotirlinga & Shiv Darshan":
-            if count == 10:
-                total_amount += 451
-            elif count == 6:
-                total_amount += 251
-            else:
-                total_amount += count * 51
-
-        elif category == "3D Abhishek Darshan":
-            total_amount += 351 if count == len(ABHISHEK_3D) else count * 51
-
-        elif category == "Shaktipeeth & Devi Darshan":
-            total_amount += 401 if count == len(SHAKTIPEETH) else count * 51
-
-        else:
-            raise HTTPException(400, f"Invalid category {category}")
+            elif category == "3D Abhishek":
+                total_amount += 351 if count == 4 else count * 51
 
     qr_path = generate_payment_qr(total_amount)
     qr_url = upload_to_supabase_qr(qr_path, "vr_darshan_qr")

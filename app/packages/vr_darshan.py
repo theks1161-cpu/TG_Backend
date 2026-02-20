@@ -17,6 +17,28 @@ from app.utils.hash.vr_aadhar_image import generate_image_hash
 
 router = APIRouter()
 
+CATEGORY_TEMPLES = {
+    "Char Dham": ["Kedarnath", "Badrinath", "Gangotri", "Yamunotri"],
+    "Jyotirlinga": [
+        "Somnath", "Mallikarjuna", "Mahakaleshwar",
+        "Omkareshwar", "Bhimashankar",
+        "Kashi Vishwanath", "Trimbakeshwar",
+        "Vaidyanath", "Nageshwar"
+    ],
+    "Shaktipeeth": [
+        "Vaishno Devi", "Kamakhya Devi",
+        "Kalighat", "Jwala Ji",
+        "Chintpurni", "Hinglaj Mata",
+        "Maa Tara Tarini", "Maa Sharda"
+    ],
+    "3D Abhishek": [
+        "Mahakal 3D Abhishek",
+        "Kashi Vishwanath 3D",
+        "Somnath 3D",
+        "Omkareshwar 3D"
+    ]
+}
+
 @router.post(
     "/vr-darshan/booking",
     status_code=status.HTTP_201_CREATED
@@ -99,8 +121,8 @@ async def create_vr_darshan_booking(
             "full_name",
             "age",
             "gender",
-            "category",
-            "spiritual_places"
+            "temples"
+            
         ]
     
 
@@ -109,13 +131,31 @@ async def create_vr_darshan_booking(
                 status_code=400,
                 detail=f"Missing fields in devotee at index {index}"
             )
-        selected_temples = devotee["spiritual_places"]
 
-        if not isinstance(selected_temples, list) or not selected_temples:
-            raise HTTPException(
-                status_code=400,
-                detail=f"Temple selection required at index {index}"
-            )
+        temples_by_category = devotee["temples"]
+
+        if not isinstance(temples_by_category, dict):
+            raise HTTPException(400, "temples must be an object")
+
+        # Validate categories and temples
+        if not temples_by_category:
+            raise HTTPException(400, "At least one temple must be selected")
+            
+        for category, temple_list in temples_by_category.items():
+
+            if category not in CATEGORY_TEMPLES:
+                raise HTTPException(400, f"Invalid category: {category}")
+
+            if "All Temples" in temple_list:
+                temple_list = CATEGORY_TEMPLES[category]
+                temples_by_category[category] = temple_list
+
+            for temple in temple_list:
+                if temple not in CATEGORY_TEMPLES[category]:
+                    raise HTTPException(
+                        400,
+                        f"{temple} not valid under {category}"
+                    )
 
         image_hash, _ = await generate_image_hash(aadhar_images[index])
         age = int(devotee["age"])
@@ -155,8 +195,7 @@ async def create_vr_darshan_booking(
                 full_name=devotee["full_name"],
                 age=devotee["age"],
                 gender=devotee["gender"],
-                category=devotee["category"],
-                spiritual_places=selected_temples,
+                temples=temples_by_category,
                 aadhar_image_url=aadhar_url,
                 aadhar_image_hash=image_hash
             )
@@ -164,6 +203,7 @@ async def create_vr_darshan_booking(
 
     db.commit()
 
+    
     background_tasks.add_task(send_admin_vr_darshan_email, booking)
 
     return {

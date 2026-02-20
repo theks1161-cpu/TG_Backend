@@ -12,14 +12,22 @@ import resend
 
 async def send_admin_vr_darshan_email(booking):
     devotees_text = ""
+
     for i, d in enumerate(booking.devotees, start=1):
+        temple_text = ""
+        if isinstance(d.temples, dict):
+            for category, temple_list in d.temples.items():
+                temple_text += f"\n  {category}:\n"
+                for temple in temple_list:
+                    temple_text += f"    - {temple}\n"
+
         devotees_text += f"""
 Devotee {i}
 Name   : {d.full_name}
 Age    : {d.age}
 Gender : {d.gender}
-Category : {d.category}
-Spiritual Place: {d.spiritual_places}
+Selected Temples:
+{temple_text}
 ID     : {d.aadhar_image_url}
 """
 
@@ -63,7 +71,7 @@ Decline (Payment Not Received):
 
     resend.Emails.send({
         "from": "Tirth Ghumo <no-reply@tirthghumo.in>",
-        "to": ["ceo.tirthghumo@gmail.com"],
+        "to": ["thekomal2502@gmail.com"],
         "subject": "VR Darshan Booking – Action Required",
         "text": body
     })
