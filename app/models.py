@@ -223,12 +223,19 @@ class VRDarshanBooking(Base):
 
     special_request = Column(Text)
     payment_screenshot = Column(String(255))
-    booking_status = Column(String(20), default="PENDING")
+    booking_status = Column(String(20), default="Confirmed")
 
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),
         nullable=False
+    )
+    __table_args__ = (
+        UniqueConstraint(
+            "preferred_date",
+            "time_slot",
+            name="uq_date_time_slot"
+        ),
     )
 
     devotees = relationship(

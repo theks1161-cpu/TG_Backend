@@ -16,6 +16,22 @@ from app.utils.hash.vr_aadhar_image import generate_image_hash
 
 
 router = APIRouter()
+WEEKDAY_SLOTS = [
+    "7:00-8:00 PM",
+    "9:00-10:00 PM"
+]
+
+WEEKEND_SLOTS = [
+    "11:00-12:00 PM",
+    "1:00-2:00 PM",
+    "3:00-4:00 PM",
+    "5:00-6:00 PM",
+    "7:00-8:00 PM",
+    "9:00-10:00 PM"
+]
+
+
+
 
 CATEGORY_TEMPLES = {
     "Char Dham": ["Kedarnath", "Badrinath", "Gangotri", "Yamunotri"],
@@ -108,7 +124,7 @@ async def create_vr_darshan_booking(
         time_slot=time_slot,
         special_request=special_request,
         payment_screenshot=payment_screenshot_url,
-        booking_status="PENDING"
+        booking_status="Confirmed"
     )
 
     db.add(booking)
@@ -140,7 +156,7 @@ async def create_vr_darshan_booking(
         # Validate categories and temples
         if not temples_by_category:
             raise HTTPException(400, "At least one temple must be selected")
-            
+
         for category, temple_list in temples_by_category.items():
 
             if category not in CATEGORY_TEMPLES:
@@ -210,6 +226,32 @@ async def create_vr_darshan_booking(
         "message": "VR Darshan booking created successfully",
         "booking_id": booking.id
     }
+
+@router.get("/vr-darshan/slots")
+def get_slots(selected_date: date, db: Session = Depends(get_db)):
+
+    # Determine weekday or weekend
+    if selected_date.weekday() >= 5:
+        # 5 = Saturday, 6 = Sunday
+        all_slots = WEEKEND_SLOTS
+    else:
+        all_slots = WEEKDAY_SLOTS
+
+    # Get booked slots for that date
+    booked_slots = db.query(models.VRDarshanBooking.time_slot).filter(
+        models.VRDarshanBooking.preferred_date == selected_date
+    ).all()
+
+    # Extract string from tuple
+    booked_slots = [slot[0] for slot in booked_slots]
+
+    return [
+        {
+            "time_slot": slot,
+            "is_available": slot not in booked_slots
+        }
+        for slot in all_slots
+    ]
 
 
 @router.post("/instant-vr-darshan")
