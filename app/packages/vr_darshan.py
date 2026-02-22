@@ -175,9 +175,10 @@ async def create_vr_darshan_booking(
 
         image_hash, _ = await generate_image_hash(aadhar_images[index])
         age = int(devotee["age"])
+        is_disabled = devotee.get("is_disabled", False)
 
 
-        if age >= 60:
+        if age >= 60 or is_disabled:
             try:
                 claim = models.VRBenefitClaim(
                     benefit_code="FREE_VR_60_PLUS",
@@ -211,6 +212,7 @@ async def create_vr_darshan_booking(
                 full_name=devotee["full_name"],
                 age=devotee["age"],
                 gender=devotee["gender"],
+                is_disabled=is_disabled,
                 temples=temples_by_category,
                 aadhar_image_url=aadhar_url,
                 aadhar_image_hash=image_hash

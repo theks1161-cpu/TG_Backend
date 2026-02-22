@@ -267,7 +267,7 @@ class VRDarshanDevotee(Base):
     # spiritual_places = Column(JSON, nullable=False)
     temples = Column(JSON, nullable=False)
     
-
+    is_disabled = Column(Boolean, default=False, nullable=False)
     aadhar_image_url = Column(Text, nullable=False)
     aadhar_image_hash = Column(String(64), nullable=False)
 

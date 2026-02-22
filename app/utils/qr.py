@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.database import engine , get_db
 from app.config import settings 
 from fastapi import BackgroundTasks
+from fastapi import Query
 
 router = APIRouter()
 
@@ -61,13 +62,19 @@ def generate_payment_qr(amount: int) -> str:
 
 @router.get("/vr-darshan/price")
 async def generate_vr_darshan_qr(
-    devotees: str = Form(...)
+    devotees: str = Query(...)
 ):
     devotees_data = json.loads(devotees)
     total_amount = 0
 
     for devotee in devotees_data:
 
+        age = int(devotee.get("age", 0))
+        is_disabled = devotee.get("is_disabled", False)
+
+        # 🔥 FREE CONDITION
+        if is_disabled or age >= 60:
+            continue
         temples_by_category = devotee.get("temples")
 
         if not temples_by_category:
@@ -109,9 +116,11 @@ async def generate_vr_darshan_qr(
             elif category == "3D Abhishek":
                 total_amount += 351 if count == 4 else count * 51
 
-    qr_path = generate_payment_qr(total_amount)
-    qr_url = upload_to_supabase_qr(qr_path, "vr_darshan_qr")
-
+    if total_amount > 0:
+        qr_path = generate_payment_qr(total_amount)
+        qr_url = upload_to_supabase_qr(qr_path, "vr_darshan_qr")
+    else:
+        qr_url = None
     return {
         "amount": total_amount,
         "payment_qr_url": qr_url
