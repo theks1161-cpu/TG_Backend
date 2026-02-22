@@ -34,25 +34,91 @@ WEEKEND_SLOTS = [
 
 
 CATEGORY_TEMPLES = {
-    "Char Dham": ["Kedarnath", "Badrinath", "Gangotri", "Yamunotri"],
-    "Jyotirlinga": [
-        "Somnath", "Mallikarjuna", "Mahakaleshwar",
-        "Omkareshwar", "Bhimashankar",
-        "Kashi Vishwanath", "Trimbakeshwar",
-        "Vaidyanath", "Nageshwar"
+    "Char Dham": [
+      "Kedarnath — Rudraprayag, Uttarakhand",
+      "Badrinath — Chamoli, Uttarakhand",
+      "Yamunotri — Uttarakhand",
+      "Gangotri — Uttarkashi, Uttarakhand",
     ],
-    "Shaktipeeth": [
-        "Vaishno Devi", "Kamakhya Devi",
-        "Kalighat", "Jwala Ji",
-        "Chintpurni", "Hinglaj Mata",
-        "Maa Tara Tarini", "Maa Sharda"
+    "Jyotirlinga & Shiv Darshan": [
+        "Kedarnath — Rudraprayag, Uttarakhand",
+      "Baba Baidyanath Jyotirlinga — Deoghar, Jharkhand",
+      "Shri Bhimashankar Jyotirlinga — Pune, Maharashtra",
+      "Shri Trimbakeshwar Jyotirlinga — Nashik, Maharashtra",
+      "Shri Nageshwar Jyotirlinga — Dwarka, Gujarat",
+      "Shri Omkareshwar Jyotirlinga — Khandwa, Madhya Pradesh",
+      "Shri Mangalnath Mandir — Ujjain, Madhya Pradesh",
+      "Shri Pashupatinath — Mandsaur, Madhya Pradesh",
+      "Bhojeshwar Mahadev — Bhojpur, Madhya Pradesh",
+      "Shri Kaal Bhairav — Ujjain, Madhya Pradesh"
+    ],
+    "Shaktipeeth & Devi Darshan": [
+        "Maa Sharda Shaktipeeth — Maihar, Madhya Pradesh",
+      "Maa Harsiddhi Devi Shaktipeeth — Ujjain, Madhya Pradesh",
+      "Maa Bhadrakali Shaktipeeth — Kurukshetra, Haryana",
+      "Maa Chamunda Devi Shaktipeeth — Dewas, Madhya Pradesh",
+      "Shri Ambabai Mahalakshmi Mandir — Kolhapur, Maharashtra",
+      "Maa Baglamukhi Mandir — Nalkheda, Madhya Pradesh",
+      "Shri Mahalakshmi Jagdamba Mandir — Koradi, Nagpur, Maharashtra",
+      "Maa Gadkalika Devi — Ujjain, Madhya Pradesh",
+      "Maa Annapurna Mandir — Indore, Madhya Pradesh"
     ],
     "3D Abhishek": [
-        "Mahakal 3D Abhishek",
-        "Kashi Vishwanath 3D",
-        "Somnath 3D",
-        "Omkareshwar 3D"
+        "Shri Kashi Vishwanath Jyotirlinga — Varanasi, UP",
+      "Shri Baidyanath Jyotirlinga — Deoghar, Jharkhand",
+      "Shri Grishneshwar Jyotirlinga — Aurangabad, Maharashtra",
+      "Shri Bhimashankar Jyotirlinga — Pune, Maharashtra",
+      "Shri Nageshwar Jyotirlinga — Dwarka, Gujarat",
+      "Shri Kedarnath Jyotirlinga — Rudraprayag, Uttarakhand",
+      "Shri Somnath Jyotirlinga — Gir Somnath, Gujarat",
+      "Shri Omkareshwar Jyotirlinga — Khandwa, Madhya Pradesh"
+    ],
+    "Shri Vishnu Darshan":[
+        "Shri Banke Bihari — Vrindavan, UP",
+      "Badrinath — Chamoli, Uttarakhand",
+      "Shri Ram Lala Surya Tilak — Ayodhya, UP",
+      "Shri Jagannath Rath Yatra — Puri, Odisha",
+      "Radha Raman Ji — Vrindavan, UP",
+      "Shri Gopal Mandir — Ujjain, Madhya Pradesh",
+      "Shri Jagannath Darshan — Koraput, Odisha"
+    ],
+    "Ayodhya Nagar Darshan":[
+        "Shri Ram Mandir — Ayodhya, UP",
+      "Hanuman Garhi — Ayodhya, UP",
+      "Saryu Aarti — Saryu Ghat, Ayodhya, UP",
+      "Ayodhya Deepotsav — Ayodhya, UP"
+    ],
+    "Shri Hanuman Darshan":[
+        "Bade Hanuman Ji — Prayagraj, UP",
+      "Shri Chhind Dham — Chhind, Madhya Pradesh",
+      "Hanuman Garhi — Ayodhya, UP",
+      "Shri Bageshwar Dham — Chhatarpur, Madhya Pradesh"
+    ],
+    "Divya Aarti Darshan":[
+        "Saryu Aarti — Ayodhya, UP",
+      "Ganga Aarti — Varanasi, UP",
+      "Hanuman Ji Ki Aarti — Hanuman Mandir",
+      "Hanuman Garhi Aarti — Ayodhya, UP",
+      "Harsiddhi Devi Aarti — Ujjain, Madhya Pradesh",
+      "Omkareshwar Shayan Aarti — Omkareshwar, Madhya Pradesh",
+      "Bhimashankar Marathi Aarti — Bhimashankar, Maharashtra",
+      "Maa Sharda Devi Aarti — Maihar, Madhya Pradesh"
+    ],
+    "Ujjain Nagar Darshan":[
+        "Shri Kaal Bhairav Mandir — Ujjain, Madhya Pradesh",
+      "Shri Mangalnath Mandir — Ujjain, Madhya Pradesh",
+      "Maa Harsiddhi Devi Mandir — Ujjain, Madhya Pradesh",
+      "Shri Chintaman Ganesh Mandir — Ujjain, Madhya Pradesh",
+      "Ram Ghat (Shipra River) — Ujjain, Madhya Pradesh",
+      "Shri Sandipani Ashram — Ujjain, Madhya Pradesh",
+      "Maa Gadkalika Devi Mandir — Ujjain, Madhya Pradesh",
+      "Shri Bhartrihari Gufa — Ujjain, Madhya Pradesh",
+      "Shri Gopal Mandir — Ujjain, Madhya Pradesh"
+    ],
+    "Additional Darshan":[
+        "Chitrakoot Darshan", "Maa Narmada Parikrama"
     ]
+
 }
 
 @router.post(

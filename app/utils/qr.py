@@ -11,26 +11,205 @@ from fastapi import Query
 
 router = APIRouter()
 
-CATEGORY_TEMPLES = {
-    "Char Dham": ["Kedarnath", "Badrinath", "Gangotri", "Yamunotri"],
-    "Jyotirlinga": [
-        "Somnath", "Mallikarjuna", "Mahakaleshwar",
-        "Omkareshwar", "Bhimashankar",
-        "Kashi Vishwanath", "Trimbakeshwar",
-        "Vaidyanath", "Nageshwar"
+CATALOGUE = {
+  "Char Dham": {
+    "perTemple": 51,
+    "packages": [
+      {
+        "label": "Char Dham Package",
+        "value": "PKG_CHARDHAM_ALL",
+        "price": 151,
+        
+      },
     ],
-    "Shaktipeeth": [
-        "Vaishno Devi", "Kamakhya Devi",
-        "Kalighat", "Jwala Ji",
-        "Chintpurni", "Hinglaj Mata",
-        "Maa Tara Tarini", "Maa Sharda"
+    "temples": [
+      "Kedarnath — Rudraprayag, Uttarakhand",
+      "Badrinath — Chamoli, Uttarakhand",
+      "Yamunotri — Uttarakhand",
+      "Gangotri — Uttarkashi, Uttarakhand",
     ],
-    "3D Abhishek": [
-        "Mahakal 3D Abhishek",
-        "Kashi Vishwanath 3D",
-        "Somnath 3D",
-        "Omkareshwar 3D"
-    ]
+  },
+  "Jyotirlinga & Shiv Darshan": {
+    "perTemple": 51,
+    "packages": [
+      {
+        "label": "6 Jyotirlinga Package",
+        "value": "PKG_JYO_6",
+        "price": 251,
+        "temples": [
+          "Kedarnath — Rudraprayag, Uttarakhand",
+          "Baba Baidyanath Jyotirlinga — Deoghar, Jharkhand",
+          "Shri Bhimashankar Jyotirlinga — Pune, Maharashtra",
+          "Shri Trimbakeshwar Jyotirlinga — Nashik, Maharashtra",
+          "Shri Nageshwar Jyotirlinga — Dwarka, Gujarat",
+          "Shri Omkareshwar Jyotirlinga — Khandwa, Madhya Pradesh",
+        ],
+      },
+      {
+        "label": "All 10 Jyotirlinga Package",
+        "value": "PKG_JYO_ALL",
+        "price": 451,
+        
+      },
+    ],
+    "temples": [
+      "Kedarnath — Rudraprayag, Uttarakhand",
+      "Baba Baidyanath Jyotirlinga — Deoghar, Jharkhand",
+      "Shri Bhimashankar Jyotirlinga — Pune, Maharashtra",
+      "Shri Trimbakeshwar Jyotirlinga — Nashik, Maharashtra",
+      "Shri Nageshwar Jyotirlinga — Dwarka, Gujarat",
+      "Shri Omkareshwar Jyotirlinga — Khandwa, Madhya Pradesh",
+      "Shri Mangalnath Mandir — Ujjain, Madhya Pradesh",
+      "Shri Pashupatinath — Mandsaur, Madhya Pradesh",
+      "Bhojeshwar Mahadev — Bhojpur, Madhya Pradesh",
+      "Shri Kaal Bhairav — Ujjain, Madhya Pradesh",
+    ],
+  },
+  "3D Abhishek": {
+    "perTemple": 51,
+    "packages": [
+      {
+        "label": "3D Abhishek Package",
+        "value": "PKG_3DABHISHEK_ALL",
+        "price": 351,
+        
+      },
+    ],
+    "temples": [
+      "Shri Kashi Vishwanath Jyotirlinga — Varanasi, UP",
+      "Shri Baidyanath Jyotirlinga — Deoghar, Jharkhand",
+      "Shri Grishneshwar Jyotirlinga — Aurangabad, Maharashtra",
+      "Shri Bhimashankar Jyotirlinga — Pune, Maharashtra",
+      "Shri Nageshwar Jyotirlinga — Dwarka, Gujarat",
+      "Shri Kedarnath Jyotirlinga — Rudraprayag, Uttarakhand",
+      "Shri Somnath Jyotirlinga — Gir Somnath, Gujarat",
+      "Shri Omkareshwar Jyotirlinga — Khandwa, Madhya Pradesh",
+    ],
+  },
+  "Shri Vishnu Darshan": {
+    "perTemple": 51,
+    "packages": [
+      {
+        "label": "Vishnu Darshan Package",
+        "value": "PKG_VISHNU_ALL",
+        "price": 301,
+        
+      },
+    ],
+    "temples": [
+      "Shri Banke Bihari — Vrindavan, UP",
+      "Badrinath — Chamoli, Uttarakhand",
+      "Shri Ram Lala Surya Tilak — Ayodhya, UP",
+      "Shri Jagannath Rath Yatra — Puri, Odisha",
+      "Radha Raman Ji — Vrindavan, UP",
+      "Shri Gopal Mandir — Ujjain, Madhya Pradesh",
+      "Shri Jagannath Darshan — Koraput, Odisha",
+    ],
+  },
+  "Shaktipeeth & Devi Darshan": {
+    "perTemple": 51,
+    "packages": [
+      {
+        "label": "Shaktipeeth Package",
+        "value": "PKG_SHAKTI_ALL",
+        "price": 401,
+        
+      },
+    ],
+    "temples": [
+      "Maa Sharda Shaktipeeth — Maihar, Madhya Pradesh",
+      "Maa Harsiddhi Devi Shaktipeeth — Ujjain, Madhya Pradesh",
+      "Maa Bhadrakali Shaktipeeth — Kurukshetra, Haryana",
+      "Maa Chamunda Devi Shaktipeeth — Dewas, Madhya Pradesh",
+      "Shri Ambabai Mahalakshmi Mandir — Kolhapur, Maharashtra",
+      "Maa Baglamukhi Mandir — Nalkheda, Madhya Pradesh",
+      "Shri Mahalakshmi Jagdamba Mandir — Koradi, Nagpur, Maharashtra",
+      "Maa Gadkalika Devi — Ujjain, Madhya Pradesh",
+      "Maa Annapurna Mandir — Indore, Madhya Pradesh",
+    ],
+  },
+  "Ayodhya Nagar Darshan": {
+    "perTemple": 51,
+    "packages": [
+      {
+        "label": "Ayodhya Package",
+        "value": "PKG_AYODHYA_ALL",
+        "price": 151,
+        
+      },
+    ],
+    "temples": [
+      "Shri Ram Mandir — Ayodhya, UP",
+      "Hanuman Garhi — Ayodhya, UP",
+      "Saryu Aarti — Saryu Ghat, Ayodhya, UP",
+      "Ayodhya Deepotsav — Ayodhya, UP",
+    ],
+  },
+  "Shri Hanuman Darshan": {
+    "perTemple": 51,
+    "packages": [
+      {
+        "label": "Hanuman Darshan Package",
+        "value": "PKG_HANUMAN_ALL",
+        "price": 151,
+        
+      },
+    ],
+    "temples": [
+      "Bade Hanuman Ji — Prayagraj, UP",
+      "Shri Chhind Dham — Chhind, Madhya Pradesh",
+      "Hanuman Garhi — Ayodhya, UP",
+      "Shri Bageshwar Dham — Chhatarpur, Madhya Pradesh",
+    ],
+  },
+  "Divya Aarti Darshan": {
+    "perTemple": 51,
+    "packages": [
+      {
+        "label": "Divya Aarti Package",
+        "value": "PKG_AARTI_ALL",
+        "price": 351,
+        
+      },
+    ],
+    "temples": [
+      "Saryu Aarti — Ayodhya, UP",
+      "Ganga Aarti — Varanasi, UP",
+      "Hanuman Ji Ki Aarti — Hanuman Mandir",
+      "Hanuman Garhi Aarti — Ayodhya, UP",
+      "Harsiddhi Devi Aarti — Ujjain, Madhya Pradesh",
+      "Omkareshwar Shayan Aarti — Omkareshwar, Madhya Pradesh",
+      "Bhimashankar Marathi Aarti — Bhimashankar, Maharashtra",
+      "Maa Sharda Devi Aarti — Maihar, Madhya Pradesh",
+    ],
+  },
+  "Ujjain Nagar Darshan": {
+    "perTemple": 51,
+    "packages": [
+      {
+        "label": "Ujjain Package",
+        "value": "PKG_UJJAIN_ALL",
+        "price": 401,
+        
+      },
+    ],
+    "temples": [
+      "Shri Kaal Bhairav Mandir — Ujjain, Madhya Pradesh",
+      "Shri Mangalnath Mandir — Ujjain, Madhya Pradesh",
+      "Maa Harsiddhi Devi Mandir — Ujjain, Madhya Pradesh",
+      "Shri Chintaman Ganesh Mandir — Ujjain, Madhya Pradesh",
+      "Ram Ghat (Shipra River) — Ujjain, Madhya Pradesh",
+      "Shri Sandipani Ashram — Ujjain, Madhya Pradesh",
+      "Maa Gadkalika Devi Mandir — Ujjain, Madhya Pradesh",
+      "Shri Bhartrihari Gufa — Ujjain, Madhya Pradesh",
+      "Shri Gopal Mandir — Ujjain, Madhya Pradesh",
+    ],
+  },
+  "Additional Darshan": {
+    "perTemple": 101,
+    "packages": [],
+    "temples": ["Chitrakoot Darshan", "Maa Narmada Parikrama"],
+  },
 }
 
 def generate_payment_qr(amount: int) -> str:
@@ -60,9 +239,10 @@ def generate_payment_qr(amount: int) -> str:
     return file_path
 
 
+
 @router.get("/vr-darshan/price")
 async def generate_vr_darshan_qr(
-    devotees: str = Query(...)
+devotees: str = Query(...)
 ):
     devotees_data = json.loads(devotees)
     total_amount = 0
@@ -70,11 +250,12 @@ async def generate_vr_darshan_qr(
     for devotee in devotees_data:
 
         age = int(devotee.get("age", 0))
-        is_disabled = devotee.get("is_disabled", False)
+        is_disabled = devotee.get("disability", False)
 
-        # 🔥 FREE CONDITION
-        if is_disabled or age >= 60:
+        # 🔥 FREE condition
+        if age >= 60 or is_disabled:
             continue
+
         temples_by_category = devotee.get("temples")
 
         if not temples_by_category:
@@ -82,45 +263,59 @@ async def generate_vr_darshan_qr(
 
         for category, temple_list in temples_by_category.items():
 
-            if category not in CATEGORY_TEMPLES:
-                raise HTTPException(400, f"Invalid category {category}")
+            if category not in CATALOGUE:
+                raise HTTPException(400, f"Invalid category: {category}")
 
+            category_data = CATALOGUE[category]
+            all_temples = category_data["temples"]
+            packages = category_data["packages"]
+            per_temple_price = category_data["perTemple"]
+
+            # Handle "All Temples"
             if "All Temples" in temple_list:
-                temple_list = CATEGORY_TEMPLES[category]
+                temple_list = all_temples
 
-            # Validate temple belongs to category
+            # Validate temples
             for temple in temple_list:
-                if temple not in CATEGORY_TEMPLES[category]:
+                if temple not in all_temples:
                     raise HTTPException(
                         400,
                         f"{temple} not valid for {category}"
                     )
 
             count = len(temple_list)
+            applied_package = False
 
-            # Apply bundle logic
-            if category == "Char Dham":
-                total_amount += 151 if count == 4 else count * 51
+            # 🔥 Check all packages
+            for pkg in packages:
 
-            elif category == "Jyotirlinga":
-                if count == 9:
-                    total_amount += 451
-                elif count == 6:
-                    total_amount += 251
+                pkg_temples = pkg.get("temples")
+
+                # Case 1: Full category package (no temples defined)
+                if pkg_temples is None:
+                    if count == len(all_temples):
+                        total_amount += pkg["price"]
+                        applied_package = True
+                        break
+
+                # Case 2: Specific bundle package
                 else:
-                    total_amount += count * 51
+                    if set(temple_list) == set(pkg_temples):
+                        total_amount += pkg["price"]
+                        applied_package = True
+                        break
 
-            elif category == "Shaktipeeth":
-                total_amount += 401 if count == 8 else count * 51
+            # If no package matched → apply perTemple
+            if not applied_package:
+                total_amount += count * per_temple_price
 
-            elif category == "3D Abhishek":
-                total_amount += 351 if count == 4 else count * 51
-
+    # Generate QR only if payment required
     if total_amount > 0:
         qr_path = generate_payment_qr(total_amount)
         qr_url = upload_to_supabase_qr(qr_path, "vr_darshan_qr")
     else:
         qr_url = None
+
     return {
         "amount": total_amount,
         "payment_qr_url": qr_url
