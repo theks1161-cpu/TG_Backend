@@ -112,7 +112,7 @@ class Enquiry_Form(Base):
 
     category = Column(String(100), nullable=False)
     destination = Column(String(150), nullable=False)
-    custom_destination = Column(String(150))
+    # custom_destination = Column(String(150))
     additional_destination = Column(String(150))
 
     start_date = Column(Date, nullable=False)
@@ -123,7 +123,7 @@ class Enquiry_Form(Base):
     departure_city = Column(String(100), nullable=False)
 
     referral_source = Column(String(100), nullable=False)
-    referral_other = Column(String(100))
+    # referral_other = Column(String(100))
 
     special_requests = Column(Text)
 

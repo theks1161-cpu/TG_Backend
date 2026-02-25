@@ -22,7 +22,7 @@ async def create_enquiry_form(
 
     category: str = Form(...),
     destination: str = Form(...),
-    custom_destination: str = Form(None),
+    # custom_destination: str = Form(None),
     additional_destination: str = Form(None),
 
     start_date: date = Form(...),
@@ -33,7 +33,7 @@ async def create_enquiry_form(
     departure_city: str = Form(...),
 
     referral_source: str = Form(...),
-    referral_other: str = Form(None),
+    # referral_other: str = Form(None),
 
     special_requests: str = Form(None),
 
@@ -64,7 +64,7 @@ async def create_enquiry_form(
 
         category=category,
         destination=destination,
-        custom_destination=custom_destination,
+        # custom_destination=custom_destination,
         additional_destination=additional_destination,
 
         start_date=start_date,
@@ -74,7 +74,7 @@ async def create_enquiry_form(
         departure_city=departure_city,
 
         referral_source=referral_source,
-        referral_other=referral_other,
+        # referral_other=referral_other,
 
         special_requests=special_requests,
     )
