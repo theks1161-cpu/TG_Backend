@@ -358,6 +358,22 @@ async def calculate_manali_price(
         "amount":amount , 
     }
 
+@router.get("/odt/qr")
+async def generate_odt_qr(
+  is_coupon_applied:bool
+):
+    amount = 1201
+
+    if is_coupon_applied:
+        amount = amount-201
+
+    qr_url = create_qr_base64(amount)
+
+    return {
+        "payment_qr_url": qr_url,
+        "amount": amount
+    } 
+
 
 
 
