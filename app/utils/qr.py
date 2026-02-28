@@ -1,4 +1,5 @@
-import json , shutil , os , qrcode , uuid , tempfile
+import json , shutil , os , qrcode , uuid , tempfile , base64
+from io import BytesIO
 from fastapi import HTTPException
 from app.utils.supabase_uploads import upload_to_supabase_qr
 from fastapi import FastAPI ,  HTTPException , Response , status , Depends , APIRouter , Form , File , UploadFile
@@ -198,7 +199,7 @@ CATALOGUE = {
       "Shri Mangalnath Mandir — Ujjain, Madhya Pradesh",
       "Maa Harsiddhi Devi Mandir — Ujjain, Madhya Pradesh",
       "Shri Chintaman Ganesh Mandir — Ujjain, Madhya Pradesh",
-      "Ram Ghat (Shipra River) — Ujjain, Madhya Pradesh",
+      "Ram Ghat (Shipra Ryourupiiver) — Ujjain, Madhya Pradesh",
       "Shri Sandipani Ashram — Ujjain, Madhya Pradesh",
       "Maa Gadkalika Devi Mandir — Ujjain, Madhya Pradesh",
       "Shri Bhartrihari Gufa — Ujjain, Madhya Pradesh",
@@ -211,32 +212,48 @@ CATALOGUE = {
     "temples": ["Chitrakoot Darshan", "Maa Narmada Parikrama"],
   },
 }
+def create_qr_base64(amount: float) -> str:
 
-def generate_payment_qr(amount: int) -> str:
     upi_id = "6260499299@okbizaxis"
-    payee_name = "Tirth Ghumo"
+    name = "Tirth Ghumo"
+
+    upi_string = f"upi://pay?pa={upi_id}&pn={name}&am={amount}&cu=INR"
+
+    img = qrcode.make(upi_string)
+
+    buffer = BytesIO()
+    img.save(buffer, format="PNG")
+    buffer.seek(0)
+
+    qr_base64 = base64.b64encode(buffer.read()).decode()
+
+    return qr_base64
+
+# def generate_payment_qr(amount: int) -> str:
+#     upi_id = "6260499299@okbizaxis"
+#     payee_name = "Tirth Ghumo"
     
 
-    upi_url = (
-        f"upi://pay?"
-        f"pa={upi_id}"
-        f"&pn={payee_name}"
-        f"&am={amount}"
-        f"&cu=INR"
+#     upi_url = (
+#         f"upi://pay?"
+#         f"pa={upi_id}"
+#         f"&pn={payee_name}"
+#         f"&am={amount}"
+#         f"&cu=INR"
         
-    )
+#     )
 
-    qr = qrcode.make(upi_url)
+#     qr = qrcode.make(upi_url)
 
-    filename = f"vr_darshan_qr_{uuid.uuid4()}.png"
+#     filename = f"vr_darshan_qr_{uuid.uuid4()}.png"
 
-    # ✅ cross-platform temp directory
-    temp_dir = tempfile.gettempdir()
-    file_path = os.path.join(temp_dir, filename)
+#     # ✅ cross-platform temp directory
+#     temp_dir = tempfile.gettempdir()
+#     file_path = os.path.join(temp_dir, filename)
 
-    qr.save(file_path)
+#     qr.save(file_path)
 
-    return file_path
+#     return file_path
 
 
 
@@ -313,8 +330,7 @@ price:int
     # Generate QR only if payment required
     # if total_amount > 0:
     if price > 0:
-        qr_path = generate_payment_qr(price)
-        qr_url = upload_to_supabase_qr(qr_path, "vr_darshan_qr")
+        qr_url = create_qr_base64(price)
     else:
         qr_url = None
 
@@ -333,8 +349,8 @@ async def calculate_manali_price(
     PRICE_PER_SLEPPER = 5000
     PRICE_PER_AC = 6000
     amount = (sleeper * PRICE_PER_SLEPPER) + (ac * PRICE_PER_AC)
-    qr_path = generate_payment_qr(amount)
-    qr_url = upload_to_supabase_qr(qr_path, "manali_qr")
+    
+    qr_url = create_qr_base64(amount)
     session_id = str(uuid.uuid4())
 
     return {
