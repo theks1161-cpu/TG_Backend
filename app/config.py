@@ -24,10 +24,10 @@ class Settings(BaseSettings):
     use_credentials : bool 
     resend_api_key:str
     supabase_bucket: str
-    supabase_url: str
+    jiobase_url: str
     supabase_key: str
     base_url:str
-    supabase = create_client(supabase_url , supabase_key)
+    supabase = create_client(jiobase_url , supabase_key)
 
     class Config:
         env_file = ".env"
