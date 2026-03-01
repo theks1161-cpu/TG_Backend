@@ -135,7 +135,7 @@ async def send_booking_email(data , image_path: str | None = None):
         # }
         email_payload = {
             "from": "Tirth Ghumo <no-reply@tirthghumo.in>",
-            "to": ["thekomal2502@gmail.com"],
+            "to": ["ceo.tirthghumo@gmail.com"],
             "subject": "New Trekking Package Booking",
             "text": safe_text.strip(),
                 }
