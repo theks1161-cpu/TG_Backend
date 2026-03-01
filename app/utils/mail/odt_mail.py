@@ -78,7 +78,7 @@ base_url = settings.base_url
 
 async def send_booking_email(data , image_path: str | None = None):
     try:
-        admin_action_base = "http://127.0.0.1:8000/odt/confirm"
+        admin_action_base = "https://tgbackend-production-7c1c.up.railway.app/odt/confirm"
         
         button_829 = f"{admin_action_base}?booking_id={data.id}&amount=829"
         button_1000 = f"{admin_action_base}?booking_id={data.id}&amount=1000"
