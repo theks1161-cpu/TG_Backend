@@ -113,19 +113,19 @@ class Enquiry_Form(Base):
     category = Column(String(100), nullable=False)
     destination = Column(String(150), nullable=False)
     # custom_destination = Column(String(150))
-    additional_destination = Column(String(150))
+    additional_destination = Column(String(150)) # optional destination
 
-    start_date = Column(Date, nullable=False)
+    start_date = Column(Date, nullable=False) #travel date
 
     adults = Column(Integer, nullable=False)
     children = Column(Integer, nullable=False, server_default="0")
 
     departure_city = Column(String(100), nullable=False)
 
-    referral_source = Column(String(100), nullable=False)
+    referral_source = Column(String(100), nullable=False) # how did you hear about us?
     # referral_other = Column(String(100))
 
-    special_requests = Column(Text)
+    special_requests = Column(Text) 
 
     submitted_at = Column(
         DateTime(timezone=True),
@@ -368,7 +368,18 @@ class ManaliTripPassenger(Base):
 
     booking = relationship("ManaliTripBooking", back_populates="passengers")
 
+class EnquiryPopup(Base):
+    __tablename__ = "enquiry_popup"
 
+    id = Column(Integer, primary_key=True, index=True)
+    full_name = Column(String(150), nullable=False)
+    contact_number = Column(String(15), nullable=False)
+    destination = Column(Text)
+    submitted_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False
+    )
 
 
 

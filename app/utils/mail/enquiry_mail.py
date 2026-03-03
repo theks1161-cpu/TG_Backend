@@ -44,3 +44,30 @@ async def send_enquiry_email(data):
         return {"status": "Enquiry email sent successfully"}
     except Exception as e:
         raise Exception(f"Enquiry email sending failed: {str(e)}")
+
+
+async def send_enquiry_popup_mail(data):
+    """
+    Send enquiry popup details to admin via Resend API
+    """
+
+    email_body = f"""
+    New Enquiry Popup Received
+
+    Full Name         : {data.full_name}
+    Contact Number    : {data.contact_number}
+    Destination       : {data.destination}
+    """
+
+    email = {
+        "from": "Tirth Ghumo <no-reply@tirthghumo.in>",
+        "to": ["hr.tirthghumo@gmail.com"],
+        "subject": "New Enquiry Popup Received",
+        "text": email_body.strip(), 
+    }
+
+    try:
+        resend.Emails.send(email)
+        return {"status": "Enquiry popup email sent successfully"}
+    except Exception as e:
+        raise Exception(f"Enquiry popup email sending failed: {str(e)}")

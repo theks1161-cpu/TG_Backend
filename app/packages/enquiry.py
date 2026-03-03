@@ -3,7 +3,7 @@ from app import models , schema
 from sqlalchemy.orm import Session
 from app.database import engine , get_db
 from app.config import settings  
-from app.utils.mail.enquiry_mail import send_enquiry_email
+from app.utils.mail.enquiry_mail import send_enquiry_email , send_enquiry_popup_mail
 import shutil, os
 # from fastapi import C
 from fastapi import BackgroundTasks
@@ -90,3 +90,25 @@ async def create_enquiry_form(
     # background_tasks.add_task(send_user_email_enquiry, enquiry_entry)
 
     return {"message": "Enquiry submitted successfully"}
+
+@router.post("/enquiry-popup" , status_code=status.HTTP_201_CREATED)
+async def get_enquiry_popup(
+    background_tasks: BackgroundTasks,
+    full_name:str = Form(...),
+    contact_number:str = Form(...),
+    destination:str = Form(...),
+     db: Session = Depends(get_db)
+):
+    popup_entry = models.EnquiryPopup(
+        full_name=full_name,
+        contact_number=contact_number,
+        destination=destination
+    )
+
+    db.add(popup_entry)
+    db.commit()
+    db.refresh(popup_entry)
+
+    background_tasks.add_task(send_enquiry_popup_mail, popup_entry)
+
+    return {"message": "Popup enquiry submitted successfully"}
