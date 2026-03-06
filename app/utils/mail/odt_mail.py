@@ -78,13 +78,11 @@ base_url = settings.base_url
 
 async def send_booking_email(data , image_path: str | None = None):
     try:
-        admin_action_base = "https://tgbackend-production-7c1c.up.railway.app/odt/confirm"
-        
-        button_829 = f"{admin_action_base}?booking_id={data.id}&amount=829"
-        button_1000 = f"{admin_action_base}?booking_id={data.id}&amount=1000"
+        admin_action_base = "https://tgbackend-production-4811.up.railway.app/odt/confirm"
+    
         button_1201 = f"{admin_action_base}?booking_id={data.id}&amount=1201"
-        button_1030 = f"{admin_action_base}?booking_id={data.id}&amount=1030"
-        decline_link = f"https://tgbackend-production-7c1c.up.railway.app/odt/decline?booking_id={data.id}"
+        button_1051 = f"{admin_action_base}?booking_id={data.id}&amount=1051"
+        decline_link = f"https://tgbackend-production-4811.up.railway.app/odt/decline?booking_id={data.id}"
 
         safe_text = f"""
         A new trekking booking has been submitted.
@@ -94,9 +92,7 @@ async def send_booking_email(data , image_path: str | None = None):
         Contact: {data.contact_number}
         College: {data.college_name}
         Package Review Links:
-        • Without Meal (829): {button_829}
-        • With Meal (1000): {button_1000}
-        • Without Meal(1030): {button_1030}
+        • Without Meal (1051): {button_1051}
         • With Meal(1201): {button_1201}
         
         Decline booking: {decline_link}
