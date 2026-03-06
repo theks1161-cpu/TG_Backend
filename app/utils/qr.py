@@ -364,7 +364,7 @@ async def generate_odt_qr(
   meal_preference:str
 ):
     with_meal_amount = 1201
-    without_meal_amount = 1030
+    without_meal_amount = 1051
 
     if meal_preference == "with_meal":
         amount = with_meal_amount
