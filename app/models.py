@@ -381,5 +381,17 @@ class EnquiryPopup(Base):
         nullable=False
     )
 
+class BhajanJamming(Base):
+    __tablename__ = "bhajan_jamming"
+
+    id = Column(Integer, primary_key=True, index=True)
+    full_name = Column(String(150), nullable=False)
+    contact_number = Column(String(15))
+    email_address = Column(String(255))
+    submitted_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False
+    )
 
 
