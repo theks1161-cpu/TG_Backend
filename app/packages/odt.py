@@ -37,7 +37,7 @@ async def odt_booking( background_tasks: BackgroundTasks,
 
     discount = 0 
 
-    if coupon_code:
+    if coupon_code and coupon_code.strip():
         coupon = db.query(models.ODTCoupon).filter(
             models.ODTCoupon.coupon_code == coupon_code
         ).first()
