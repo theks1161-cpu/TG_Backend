@@ -80,9 +80,9 @@ async def send_booking_email(data , image_path: str | None = None):
     try:
         admin_action_base = "https://tgbackend-production-4811.up.railway.app/odt/confirm"
     
-        button_1201 = f"{admin_action_base}?booking_id={data.id}&amount=1201"
-        button_1051 = f"{admin_action_base}?booking_id={data.id}&amount=1051"
-        button_1001 = f"{admin_action_base}?booking_id={data.id}&amount=1001"
+        button_1251 = f"{admin_action_base}?booking_id={data.id}&amount=1251"
+        button_1101 = f"{admin_action_base}?booking_id={data.id}&amount=1101"
+        button_1301 = f"{admin_action_base}?booking_id={data.id}&amount=1301"
         button_1151 = f"{admin_action_base}?booking_id={data.id}&amount=1151"
         decline_link = f"https://tgbackend-production-4811.up.railway.app/odt/decline?booking_id={data.id}"
 
@@ -94,10 +94,10 @@ async def send_booking_email(data , image_path: str | None = None):
         Contact: {data.contact_number}
         College: {data.college_name}
         Package Review Links:
-        • Without Meal (1051): {button_1051}
-        • With Meal(1201): {button_1201}
-        • Coupon and with meal(1151): {button_1151}
-        • Coupon and without meal(1001): {button_1001}
+        • Without Meal (1151): {button_1151}
+        • With Meal(1301): {button_1301}
+        • Coupon and with meal(1251): {button_1251}
+        • Coupon and without meal(1101): {button_1101}
         
         Decline booking: {decline_link}
 
