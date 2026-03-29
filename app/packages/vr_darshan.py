@@ -419,10 +419,10 @@ async def add_multiple(
                     )
 
             row = ShivratriVRDarshan(
-                full_name=d.get("name") or None,
+                full_name=d.get("full_name") or None,
                 age=int(d["age"]) if d.get("age") not in [None, ""] else None,
                 gender=d.get("gender") or None,
-                darshanCategory=d.get("category") or None,
+                darshanCategory=d.get("darshanCategory") or None,
                 darshan=d.get("darshan") or None,
                 contact_number=d.get("contact_number") or None,
                 aadhar_image_url=aadhar_url
